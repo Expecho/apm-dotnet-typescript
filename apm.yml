@@ -1,5 +1,5 @@
 name: dotnet-ts-agentic-workflow
-version: 1.0.0
+version: 1.0.1
 description: Plan / execute / review workflow - spec-driven planning, per-step test gating, ADRs, gotchas, doc-drift audits, read-only scout and critic subagents, and a protected-branch git hook.
 author: Expecho
 # Which agent platforms to deploy to.
@@ -9,7 +9,6 @@ targets:
 - claude
 - copilot
 - cursor
-- opencode
 dependencies:
   apm:
   # Semver range: `apm update` pulls the newest 4.x release tag, never untagged commits or a new major.
