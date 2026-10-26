@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${PLUGIN_ROOT}/.apm/hooks/protect-main.mjs\""
+            "command": "bash -c 'node \"${PLUGIN_ROOT}/.apm/hooks/protect-main.mjs\"'"
           }
         ]
       }

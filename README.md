@@ -30,7 +30,7 @@ apm install Expecho/apm-dotnet-typescript#^1.0.0
 
 - **Claude Code:** installed to `.claude/settings.json`. Cursor runs it through its default Claude-hook import.
 - **GitHub Copilot (CLI and cloud agent):** installed to `.github/hooks/`.
-- **Known issue, Copilot CLI on Windows with both `claude` and `copilot` targets:** Copilot CLI also runs the Claude hook from `.claude/settings.json`, and on Windows it runs that command in PowerShell, where APM's `${CLAUDE_PROJECT_DIR}` path is empty. The hook then fails, and Copilot denies every shell command. Install with only one of the two targets on Windows until this is fixed in APM or Copilot.
+- **Windows:** Copilot CLI also runs the Claude hook from `.claude/settings.json`, through PowerShell. The Claude command is wrapped in `bash -c '…'` so it still finds its script there ([github/copilot-cli#4001](https://github.com/github/copilot-cli/issues/4001)). That `bash` must resolve to Git Bash, not the WSL launcher in `System32`.
 
 **Instructions**: `hard-rules`, `knowledge-map` and `working-agreement`, the workflow's always-on rules. They apply globally (no `applyTo`).
 
