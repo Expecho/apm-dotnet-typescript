@@ -1,13 +1,17 @@
 #!/usr/bin/env node
 // PreToolUse hook: blocks agent-initiated git commits on protected branches and
-// pushes to/from protected refs. Exit 2 = block tool call, stderr shown to Claude.
+// pushes to/from protected refs. Exit 2 = block tool call, stderr shown to the agent.
+// Runs under Claude Code (`tool_name: "Bash"`, `tool_input.command`) and GitHub Copilot
+// (`toolName: "bash" | "powershell"`, `toolArgs.command`, `cwd`); a block also prints
+// Copilot's `permissionDecision: deny` JSON, which Claude ignores on exit 2.
 // The protected list is read from .agentic/quality-gates.yaml (branches.protected)
 // — single source, shared with lefthook.yml; falls back to a safe default.
 import { execSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { isAbsolute, join, resolve } from "node:path";
 
-const ROOT = process.env.CLAUDE_PROJECT_DIR || process.cwd();
+// Copilot has no project-dir variable; its payload `cwd` replaces process.cwd() once parsed.
+let ROOT = process.env.CLAUDE_PROJECT_DIR || process.cwd();
 const FALLBACK = ["main", "master", "develop"];
 
 function protectedBranches() {
@@ -72,6 +76,7 @@ function protectedTargets(cmd, PROTECTED) {
 
 function block(msg) {
   console.error(msg);
+  console.log(JSON.stringify({ permissionDecision: "deny", permissionDecisionReason: msg }));
   process.exit(2);
 }
 
@@ -81,8 +86,12 @@ process.stdin.on("end", () => {
   let cmd = "";
   try {
     const payload = JSON.parse(input);
-    if (payload.tool_name !== "Bash") process.exit(0);
-    cmd = String(payload.tool_input?.command ?? "");
+    const tool = String(payload.tool_name ?? payload.toolName ?? "").toLowerCase();
+    if (tool !== "bash" && tool !== "powershell") process.exit(0);
+    let args = payload.tool_input ?? payload.toolArgs;
+    if (typeof args === "string") args = JSON.parse(args); // Copilot may pass toolArgs as a JSON string
+    cmd = String(args?.command ?? "");
+    if (!process.env.CLAUDE_PROJECT_DIR && payload.cwd) ROOT = String(payload.cwd);
   } catch {
     process.exit(0); // never break the session on malformed input
   }

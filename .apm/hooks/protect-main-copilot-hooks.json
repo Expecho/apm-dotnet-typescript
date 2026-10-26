@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "matcher": "bash|powershell",
+        "bash": "node \"${PLUGIN_ROOT}/.apm/hooks/protect-main.mjs\"",
+        "powershell": "node \"${PLUGIN_ROOT}/.apm/hooks/protect-main.mjs\"; exit $LASTEXITCODE",
+        "timeoutSec": 10
+      }
+    ]
+  }
+}
