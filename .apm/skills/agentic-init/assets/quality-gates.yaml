@@ -1,0 +1,27 @@
+# Single source of truth for branch policy and quality-gate thresholds.
+# Hooks, skills, and CI read this file; values are NEVER hardcoded elsewhere.
+
+branches:
+  protected: [main]  # read by the protect-main agent hook (and lefthook.yml, if used)
+
+# EVERY GATE BELOW MUST HAVE A MEASURING TOOL IN THIS REPO.
+# A threshold nothing measures cannot fail, so it is not a gate — it is a wish that reads like one.
+# Name the tool in a comment above each gate. DELETE any gate this repo cannot measure; never estimate it.
+gates:
+  # node .agentic/scripts/check-new-code-coverage.mjs — cobertura report(s) x git diff, so this is the
+  # coverage of the lines this branch ADDED, not the repo's slow-moving overall number.
+  # .NET: coverlet; TypeScript: Vitest / Jest / c8 with the cobertura reporter.
+  coverage_new_code_pct_min: 80
+  # e.g. SonarAnalyzer.CSharp S3776 at build time, or ESLint `complexity`; /dotnet-complexity, /ts-complexity
+  # cyclomatic_complexity_max: 15
+
+enforcement:
+  local: soft_warning        # skills render the gate table, ask proceed/abort on FAIL
+  ci: hard_block             # list what your PR checks block on here
+
+dependencies:
+  vulnerable_packages: 0     # hard block
+  outdated_packages: report  # soft — surfaced, upgraded via MRs, not blocked
+  add_policy: latest-stable  # new deps resolved from the feed at add time, never from memory
+
+coverage_tooling: none       # e.g. coverlet, vitest, jest, c8 — and the command that produces the cobertura report

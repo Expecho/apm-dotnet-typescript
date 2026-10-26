@@ -1,0 +1,5 @@
+build/
+apm_modules/
+.claude-plugin/*
+!.claude-plugin/marketplace.json
+.github/plugin/
