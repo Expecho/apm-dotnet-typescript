@@ -69,6 +69,10 @@ The `execute-plan` skill has an `<!-- onboard:mr-command -->` marker. Replace it
 
 The `critic`, `scout` and `step-implementer` agents assume a Claude model tier (`sonnet` / `haiku`). Other harnesses may ignore the `model` field.
 
+## APM vs Claude Code plugins
+
+See [docs/apm-vs-claude-plugins.md](docs/apm-vs-claude-plugins.md): what each covers, versioning, governance, security, and the plugin standards landscape.
+
 ## Develop
 
 ```bash
