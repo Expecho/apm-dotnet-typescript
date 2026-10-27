@@ -73,6 +73,14 @@ The `critic`, `scout` and `step-implementer` agents assume a Claude model tier (
 
 See [docs/apm-vs-claude-plugins.md](docs/apm-vs-claude-plugins.md): what each covers, versioning, governance, security, and the plugin standards landscape.
 
+## APM policy and alternatives
+
+See [docs/apm-policy-and-alternatives.md](docs/apm-policy-and-alternatives.md): what `apm-policy.yml` can enforce at install time, how discovery behaves outside GitHub, and how APM compares with other agent-config tools.
+
+## Security demo: hidden text in a skill
+
+See [docs/security-demo/README.md](docs/security-demo/README.md): a harmless skill carrying an instruction hidden in invisible Unicode, and how `apm audit` detects and strips it.
+
 ## Develop
 
 ```bash
