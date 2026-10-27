@@ -3,3 +3,5 @@ apm_modules/
 .claude-plugin/*
 !.claude-plugin/marketplace.json
 .github/plugin/
+__pycache__/
+*.pyc
